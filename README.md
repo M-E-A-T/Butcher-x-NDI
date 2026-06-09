@@ -1,5 +1,7 @@
 # ***Butcher x NDI workflow setup guide***
 
+___compatibility & GUI update___
+
 ## **NDi Transmitter setup:**
 1. Open a touch designer project and press tab to add a MovieFileInTOP and an NDIoutTop
 
