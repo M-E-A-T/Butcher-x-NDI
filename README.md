@@ -41,3 +41,29 @@
 10. CD to file location then run the following**
 - Python3 -u NDI2.py
 - Press escape to exit program
+
+## Tkinter (GUI) notes
+
+The source selector UI uses `tkinter`. This is provided by the system Python build (not installable via pip).
+If you plan to use the GUI on Linux, install the system package for `tkinter`:
+
+- Debian / Ubuntu:
+	```bash
+	sudo apt-get install python3-tk
+	```
+- Fedora:
+	```bash
+	sudo dnf install python3-tkinter
+	```
+- Arch Linux:
+	```bash
+	sudo pacman -S tk
+	```
+- macOS (Homebrew):
+	```bash
+	brew install tcl-tk
+	# ensure your Python is built/linked with that Tk or use the python.org installer
+	```
+- Windows: `tkinter` is included with the standard CPython installer.
+
+The project will still run without `tkinter` (it falls back to auto-detecting the first NDI source), but the GUI source selector requires it.

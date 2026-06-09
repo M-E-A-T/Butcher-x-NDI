@@ -7,7 +7,19 @@ import NDIlib as ndi
 
 WINDOW_NAME = "NDI Fullscreen"
 
+from ndi_source_selector import choose_source
+
 def find_first_source(finder):
+    # Present a UI to the user to choose a source. Falls back to waiting loop if UI fails.
+    try:
+        src = choose_source(ndi, finder)
+        if src:
+            print(f"[*] User selected source: {getattr(src,'ndi_name',None) or getattr(src,'p_ndi_name',None)}")
+            return src
+    except Exception as e:
+        print(f"[!] Source selector UI failed: {e}. Falling back to auto-detect.")
+
+    # fallback behavior (blocking wait)
     while True:
         ndi.find_wait_for_sources(finder, 2000)
         sources = ndi.find_get_current_sources(finder)
