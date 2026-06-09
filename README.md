@@ -1,6 +1,10 @@
 # ***Butcher x NDI workflow setup guide***
 
 ___compatibility & GUI update___
+	- added __requirements.txt__
+	- added __NDlib.py__ ctype wrapper that refrences ND SDK
+	- added __install_and_check.sh__ shell script to verify SDK and dependencies are downloaded and accessible
+	- updated readme.md
 
 ## **NDi Transmitter setup:**
 1. Open a touch designer project and press tab to add a MovieFileInTOP and an NDIoutTop
