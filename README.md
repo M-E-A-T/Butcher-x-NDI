@@ -24,22 +24,23 @@
 - sudo ldconfig
 
 
-3. To ensure each python library is installed and ready to use, install the following:
+2. To ensure each python library is installed and ready to use, install the following:
 - pip install numpy
 - pip install opencv-python
 - pip install ndi-python
 
-6. To ensure the receiving laptop is seeing all incoming NDI data streams, make sure these ports are open by running the following:
+3. To ensure the receiving laptop is seeing all incoming NDI data streams, make sure these ports are open by running the following:
 - sudo ufw allow 5353/udp
 - sudo ufw allow 5960:5970/tcp
 - sudo ufw allow 5960:5970/udp
 
-8. Install avahi to amenable device discovery
+4. Install avahi to amenable device discovery
 - sudo apt update
 - sudo apt install avahi-daemon avahi-utils libnss-mdns
 
-10. CD to file location then run the following**
-- Python3 -u NDI2.py
+5. CD to file location then run the following**
+- ./install_and_check.sh to ensure everythign is downloaded and accessible
+- Python3 -u NDI2.py to run
 - Press escape to exit program
 
 ## Tkinter (GUI) notes
