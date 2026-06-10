@@ -1,2 +1,54 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# Virtualenvs
+.venv/
+venv/
+env/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+.pytest_cache/
+.coverage
+coverage.xml
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+*.tmp
+
+# Local environment files
+.env
+
+# Prevent accidental check-in of native SDK binaries
+libndi.*
+*.dylib
+*.so
+*.dll
 Install_NDI_SDK_v6_Linux.sh
 Install_NDI_SDK_v6_Linux.tar.gz

@@ -1,5 +1,11 @@
 # ***Butcher x NDI workflow setup guide***
 
+### compatibility & GUI update
+- added **requirements.txt**
+- added **NDIlib.py** ctype wrapper that refrences ND SDK
+- added **install_and_check.sh** shell script to verify SDK and dependencies are downloaded and accessible
+- updated readme.md
+	
 ## **NDi Transmitter setup:**
 1. Open a touch designer project and press tab to add a MovieFileInTOP and an NDIoutTop
 
@@ -24,20 +30,47 @@
 - sudo ldconfig
 
 
-3. To ensure each python library is installed and ready to use, install the following:
+2. To ensure each python library is installed and ready to use, install the following:
 - pip install numpy
 - pip install opencv-python
 - pip install ndi-python
 
-6. To ensure the receiving laptop is seeing all incoming NDI data streams, make sure these ports are open by running the following:
+3. To ensure the receiving laptop is seeing all incoming NDI data streams, make sure these ports are open by running the following:
 - sudo ufw allow 5353/udp
 - sudo ufw allow 5960:5970/tcp
 - sudo ufw allow 5960:5970/udp
 
-8. Install avahi to amenable device discovery
+4. Install avahi to amenable device discovery
 - sudo apt update
 - sudo apt install avahi-daemon avahi-utils libnss-mdns
 
-10. CD to file location then run the following**
-- Python3 -u NDI2.py
+5. CD to file location then run the following**
+- ./install_and_check.sh to ensure everythign is downloaded and accessible
+- Python3 -u NDI2.py to run
 - Press escape to exit program
+
+## Tkinter (GUI) notes
+
+The source selector UI uses `tkinter`. This is provided by the system Python build (not installable via pip).
+If you plan to use the GUI on Linux, install the system package for `tkinter`:
+
+- Debian / Ubuntu:
+	```bash
+	sudo apt-get install python3-tk
+	```
+- Fedora:
+	```bash
+	sudo dnf install python3-tkinter
+	```
+- Arch Linux:
+	```bash
+	sudo pacman -S tk
+	```
+- macOS (Homebrew):
+	```bash
+	brew install tcl-tk
+	# ensure your Python is built/linked with that Tk or use the python.org installer
+	```
+- Windows: `tkinter` is included with the standard CPython installer.
+
+The project will still run without `tkinter` (it falls back to auto-detecting the first NDI source), but the GUI source selector requires it.
