@@ -1,0 +1,48 @@
+#!/bin/bash
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+RESOURCES="$SCRIPT_DIR/Resources"
+NDI_LIB="$RESOURCES/NDI SDK for Linux/lib/x86_64-linux-gnu"
+VENV="$RESOURCES/venv"
+
+cleanup() {
+    if type deactivate &>/dev/null 2>&1; then
+        deactivate 2>/dev/null || true
+    fi
+}
+trap cleanup EXIT INT TERM
+
+export LD_LIBRARY_PATH="$NDI_LIB${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+
+echo "[*] Configuring firewall for NDI..."
+sudo ufw allow 5353/udp
+sudo ufw allow 5960:5970/tcp
+sudo ufw allow 5960:5970/udp
+
+APT_PKGS="avahi-daemon avahi-utils libnss-mdns python3-tk"
+needs_install=0
+for pkg in $APT_PKGS; do
+    if ! dpkg -s "$pkg" &>/dev/null 2>&1; then
+        needs_install=1
+        break
+    fi
+done
+
+if [ "$needs_install" -eq 1 ]; then
+    echo "[*] Installing missing system packages..."
+    sudo apt update
+    sudo apt install -y $APT_PKGS
+else
+    echo "[*] System packages already installed."
+fi
+
+echo "[*] Activating virtual environment..."
+cd "$RESOURCES"
+source "$VENV/bin/activate"
+
+echo "[*] Launching NDI Viewer..."
+python NDI2.py
+
+echo "[*] Session ended."

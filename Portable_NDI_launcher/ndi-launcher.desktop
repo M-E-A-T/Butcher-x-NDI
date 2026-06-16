@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=NDI Viewer
+Comment=Launch NDI network video viewer
+Exec=bash -c 'cd "$(dirname "$0")" && exec bash "./Open NDI Viewer to start"' %k
+Terminal=true
+Categories=AudioVideo;Player;
