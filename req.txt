@@ -1,0 +1,8 @@
+have a script tht 
+
+
+kills all previous python instances
+goes to Desktop
+check if folder exists 
+if it doesnt clone "porable_NDI_launcher"
+then run Open NDI Viewer to start
