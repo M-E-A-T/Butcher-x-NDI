@@ -9,7 +9,7 @@
         # The path on the control machine (Ansible host)
         src: "../"
         # The path on the remote managed node
-        dest: "{{ ansible_env.HOME }}/Desktop/BUTCHER/"
+        dest: "{{ ansible_env.HOME }}/Desktop/BUTCHER-X-NDI/"
         # Optional parameters for rsync behavior:
         # archive mode (recursive, preserves permissions, ownership, timestamps, etc.)
         archive: true 

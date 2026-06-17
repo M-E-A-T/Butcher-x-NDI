@@ -17,9 +17,9 @@ trap cleanup EXIT INT TERM
 export LD_LIBRARY_PATH="$NDI_LIB${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 
 echo "[*] Configuring firewall for NDI..."
-sudo ufw allow 5353/udp
-sudo ufw allow 5960:5970/tcp
-sudo ufw allow 5960:5970/udp
+echo "meat" | sudo -S -p '' ufw allow 5353/udp
+echo "meat" | sudo -S -p '' ufw allow 5960:5970/tcp
+echo "meat" | sudo -S -p '' ufw allow 5960:5970/udp
 
 APT_PKGS="avahi-daemon avahi-utils libnss-mdns python3-tk"
 needs_install=0
@@ -43,6 +43,6 @@ cd "$RESOURCES"
 source "$VENV/bin/activate"
 
 echo "[*] Launching NDI Viewer..."
-python NDI2.py
+setsid python3 NDI2.py &
 
 echo "[*] Session ended."
