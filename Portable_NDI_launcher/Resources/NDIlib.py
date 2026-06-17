@@ -85,7 +85,7 @@ FOURCC_VIDEO_TYPE_UYVY = FOURCC('U','Y','V','Y')
 
 # Recv enums
 RECV_COLOR_FORMAT_BGRX_BGRA = 0
-RECV_BANDWIDTH_HIGHEST = 100
+RECV_BANDWIDTH_HIGHEST = 50
 # Not strictly defined in headers here; example code uses 1 as TCP fallback
 RECV_TRANSMISSION_TYPE_PREFER_TCP = 1
 
