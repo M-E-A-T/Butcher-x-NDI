@@ -13,9 +13,20 @@ else
 fi
 
 hosts=(
-"7.7.7.204 meat04"
-
-
+"7.7.7.210 meat10"
+"7.7.7.218 meat18"
+"7.7.7.216 meat16"
+"7.7.7.227 meat27"
+"7.7.7.217 meat17"
+"7.7.7.220 meat20"
+"7.7.7.209 meat09"
+"7.7.7.228 meat28"
+"7.7.7.222 meat22"
+"7.7.7.226 meat26"
+"7.7.7.219 meat19"
+"7.7.7.208 meat08"
+"7.7.7.221 meat-21"
+"7.7.7.203 meat03"
 )
 
 echo "=== Installing SSH keys with auto-password ==="

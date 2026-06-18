@@ -12,6 +12,7 @@ ansible-playbook -i ansible/config/hosts.ini ping.yml
 ansible-playbook -i ansible/config/hosts.ini ansible/setup_ssh_keys.yml
 ansible-playbook -i ansible/config/hosts.ini sync_files.yml
 
+ansible-playbook -i ansible/config/test.ini ansible/config/ping.yml --ask-pass
 
 
 
