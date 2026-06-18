@@ -123,10 +123,6 @@
 
   tasks:
 
-    - name: Kill spython
-      ansible.builtin.command: killall python3
-      ignore_errors: yes
-
     - name: run NDI shell script
       ansible.builtin.shell: |
         './Open NDI Viewer to start'

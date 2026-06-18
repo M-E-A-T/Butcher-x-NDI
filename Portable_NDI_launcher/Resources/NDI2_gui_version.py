@@ -3,38 +3,39 @@
 import cv2
 import numpy as np
 import time
-import random
 import NDIlib as ndi
 
 WINDOW_NAME = "NDI Fullscreen"
 
-
-def source_name(src):
-    return (
-        getattr(src, "ndi_name", None)
-        or getattr(src, "p_ndi_name", None)
-        or "Unknown"
-    )
-
-
-def get_available_sources(finder):
-    sources = ndi.find_get_current_sources(finder)
-    return sources[:10]
+from ndi_source_selector import choose_source
 
 
 def find_first_source(finder):
+    try:
+        src = choose_source(ndi, finder)
+
+        if src:
+            print(
+                f"[*] User selected source: "
+                f"{getattr(src, 'ndi_name', None) or getattr(src, 'p_ndi_name', None)}"
+            )
+            return src
+
+        print("[*] User cancelled source selection.")
+        raise SystemExit(0)
+
+    except (SystemExit, KeyboardInterrupt):
+        raise
+
+    except Exception as e:
+        print(f"[!] Source selector UI failed: {e}. Falling back to auto-detect.")
+
     while True:
         ndi.find_wait_for_sources(finder, 2000)
         sources = ndi.find_get_current_sources(finder)
 
         if len(sources) > 0:
-            print("[*] Available NDI sources:")
-
-            for i, src in enumerate(sources[:10]):
-                key_label = i + 1 if i < 9 else 0
-                print(f"    {key_label}: {source_name(src)}")
-
-            print(f"[*] Defaulting to first source: {source_name(sources[0])}")
+            print(f"[*] Successfully established source: {sources[0].ndi_name}")
             return sources[0]
 
         print("[!] Waiting for an NDI source broadcast...")
@@ -65,29 +66,7 @@ def create_receiver(source):
 
     ndi.recv_connect(receiver, source)
 
-    print(f"[*] Connected to source: {source_name(source)}")
-
     return receiver
-
-
-def switch_source(old_receiver, source):
-    if old_receiver:
-        ndi.recv_destroy(old_receiver)
-
-    print(f"[*] Switching to source: {source_name(source)}")
-
-    receiver = create_receiver(source)
-    time.sleep(0.5)
-
-    return receiver
-
-
-def print_sources(sources):
-    print("[*] Available NDI sources:")
-
-    for i, src in enumerate(sources[:10]):
-        key_label = i + 1 if i < 9 else 0
-        print(f"    {key_label}: {source_name(src)}")
 
 
 def main():
@@ -102,52 +81,14 @@ def main():
     receiver = None
     window_initialized = False
 
-    sources = []
-    current_source_index = 0
-
-    random_mode = False
-    next_random_switch = None
-    random_min_seconds = 2.0
-    random_max_seconds = 8.0
-
     print("[*] NDI Engine Started. Searching network...")
 
     try:
         while True:
             if receiver is None:
                 source = find_first_source(finder)
-                sources = get_available_sources(finder)
-
-                if len(sources) == 0:
-                    sources = [source]
-
-                current_source_index = 0
                 receiver = create_receiver(source)
                 time.sleep(0.5)
-
-            if random_mode and next_random_switch is not None:
-                if time.time() >= next_random_switch:
-                    sources = get_available_sources(finder)
-
-                    if len(sources) > 0:
-                        if len(sources) > 1:
-                            possible_indices = [
-                                i for i in range(len(sources))
-                                if i != current_source_index
-                            ]
-                            current_source_index = random.choice(possible_indices)
-                        else:
-                            current_source_index = 0
-
-                        receiver = switch_source(
-                            receiver,
-                            sources[current_source_index],
-                        )
-
-                    next_random_switch = time.time() + random.uniform(
-                        random_min_seconds,
-                        random_max_seconds,
-                    )
 
             frame_type, video_frame, audio_frame, metadata_frame = (
                 ndi.recv_capture_v2(receiver, 500)
@@ -157,8 +98,7 @@ def main():
                 if video_frame.data is None:
                     ndi.recv_free_video_v2(receiver, video_frame)
 
-                    key = cv2.waitKey(1) & 0xFF
-
+                    key = cv2.waitKey(1)
                     if key == 27:
                         break
 
@@ -237,46 +177,10 @@ def main():
             elif frame_type == ndi.FRAME_TYPE_NONE:
                 time.sleep(0.005)
 
-            key = cv2.waitKey(1) & 0xFF
+            key = cv2.waitKey(1)
 
             if key == 27:  # ESC to exit
                 break
-
-            elif key == ord(" "):
-                random_mode = not random_mode
-
-                if random_mode:
-                    next_random_switch = time.time() + random.uniform(
-                        random_min_seconds,
-                        random_max_seconds,
-                    )
-                    print("[*] Random source switching ON")
-                else:
-                    next_random_switch = None
-                    print("[*] Random source switching OFF")
-
-            elif key in [ord(str(n)) for n in range(1, 10)] or key == ord("0"):
-                sources = get_available_sources(finder)
-
-                if len(sources) > 0:
-                    print_sources(sources)
-
-                if key == ord("0"):
-                    selected_index = 9
-                else:
-                    selected_index = int(chr(key)) - 1
-
-                if selected_index < len(sources):
-                    current_source_index = selected_index
-                    random_mode = False
-                    next_random_switch = None
-
-                    receiver = switch_source(
-                        receiver,
-                        sources[current_source_index],
-                    )
-                else:
-                    print(f"[!] No NDI source assigned to key {chr(key)}.")
 
     finally:
         print("[*] Shutting down clean...")
