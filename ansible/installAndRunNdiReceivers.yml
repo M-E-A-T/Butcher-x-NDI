@@ -44,7 +44,7 @@
 
     - name: run NDI shell script
       ansible.builtin.shell: |
-        ./launchNdiViewer.sh
+        ./installAndLaunchNdiViewer.sh
       args:
         chdir: "{{ project_root }}"
         executable: /bin/bash

@@ -7,7 +7,7 @@
     - name: Use rsync to synchronize the folder
       ansible.posix.synchronize:
         # The path on the control machine (Ansible host)
-        src: "../"
+        src: "../../"
         # The path on the remote managed node
         dest: "{{ ansible_env.HOME }}/Desktop/BUTCHER-X-NDI/"
         # Optional parameters for rsync behavior:
